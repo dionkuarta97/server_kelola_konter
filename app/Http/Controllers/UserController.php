@@ -67,7 +67,7 @@ class UserController extends Controller
             'konterId' => $checkUser['konterId']
         ];
 
-        $key = env('JWT_SECRET');
+        $key = config('app.jwt_key');
         $access_token = JWT::encode($payload, $key);
 
         return response()->json(['access_token' => $access_token, 'user' => $payload], 200);

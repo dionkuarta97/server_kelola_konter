@@ -20,13 +20,13 @@ class JwtAuth
     public function handle(Request $request, Closure $next)
     {
         $token = $request->header('access_token');
-        $key = env('JWT_SECRET');
+        $key = config('app.jwt_key');
         if (!$token) return response()->json(['message' => 'Anda Tidak Dapat Akses'], 401);
 
         try {
             $checkToken = JWT::decode($token, new Key($key, "HS256"));
         } catch (Exception $e) {
-            return response()->json(['message' => 'Anda Tidak Dapat Akses'], 401);
+            return response()->json(['message' => $e->getMessage()], 500);
         }
 
 
