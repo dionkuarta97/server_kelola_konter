@@ -17,4 +17,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/create', [KonterController::class, 'createKonter']);
 Route::get('/all', [KonterController::class, 'getAllKonter']);
-Route::put('/update_konter/{konterId}', [KonterController::class, 'updateKonter']);
+Route::put('/update/{konterId}', [KonterController::class, 'updateKonter']);
