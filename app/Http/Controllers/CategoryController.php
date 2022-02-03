@@ -6,6 +6,9 @@ use App\Models\ProdukPulsa;
 use App\Models\ProdukVocher;
 use App\Models\Pulsa;
 use App\Models\Vocher;
+use App\Models\Bri;
+use App\Models\Chip;
+use App\Models\Topup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -184,6 +187,200 @@ class CategoryController extends Controller
             if ($produkVocher) return response()->json(['message' => 'ada produk terkait dengan kategori ini, data tidak bisa di hapus'], 400);
             $vocher->delete();
             return response()->json(['message' => 'data berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function createBri(Request $request)
+    {
+        try {
+            //code...
+            $nama = $request->nama;
+            if (!$nama) return response()->json(['message' => 'nama tidak boleh kosong'], 404);
+            $bri = Bri::create([
+                "nama" => $nama
+            ]);
+
+            return response()->json($bri, 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function createTopup(Request $request)
+    {
+        try {
+            //code...
+            $nama = $request->nama;
+            if (!$nama) return response()->json(['message' => 'nama tidak boleh kosong'], 404);
+            $topup = Topup::create([
+                "nama" => $nama
+            ]);
+
+            return response()->json($topup, 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function createChip(Request $request)
+    {
+        try {
+            //code...
+            $nama = $request->nama;
+            if (!$nama) return response()->json(['message' => 'nama tidak boleh kosong'], 404);
+            $chip = Chip::create([
+                "nama" => $nama,
+                'status' => 'active'
+            ]);
+
+            return response()->json($chip, 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+    public function updateBri(Request $request)
+    {
+        try {
+            //code...
+            $id = $request->route('briId');
+            $nama = $request->nama;
+            $status = $request->status;
+            $bri = Bri::find($id);
+            if (!$bri) return response()->json(['message' => 'data tidak di temukan'], 404);
+            if (!$nama) $nama = $bri['nama'];
+            if (!$status) $status = $bri['status'];
+            $bri->update([
+                'nama' => $nama,
+                'status' => $status
+            ]);
+            return response()->json(['message' => "data berhasil di ubah"]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function updateChip(Request $request)
+    {
+        try {
+            //code...
+            $id = $request->route('chipId');
+            $nama = $request->nama;
+            $status = $request->status;
+            $chip = Chip::find($id);
+            if (!$chip) return response()->json(['message' => 'data tidak di temukan'], 404);
+            if (!$nama) $nama = $chip['nama'];
+            if (!$status) $status = $chip['status'];
+            $chip->update([
+                'nama' => $nama,
+                'status' => $status
+            ]);
+            return response()->json(['message' => "data berhasil di ubah"]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function updateTopup(Request $request)
+    {
+        try {
+            //code...
+            $id = $request->route('topupId');
+            $nama = $request->nama;
+            $status = $request->status;
+            $topup = Topup::find($id);
+            if (!$topup) return response()->json(['message' => 'data tidak di temukan'], 404);
+            if (!$nama) $nama = $topup['nama'];
+            if (!$status) $status = $topup['status'];
+            $topup->update([
+                'nama' => $nama,
+                'status' => $status
+            ]);
+            return response()->json(['message' => "data berhasil di ubah"]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function getAllBri(Request $request)
+    {
+        try {
+            //code...
+            $status = $request->query('status');
+            $where = [];
+            if ($status) $where = [['status', '=', $status]];
+            $bri = Bri::where($where)->get();
+            return response()->json($bri, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function getAllChip(Request $request)
+    {
+        try {
+            //code...
+            $status = $request->query('status');
+            $where = [];
+            if ($status) $where = [['status', '=', $status]];
+            $chip = Chip::where($where)->get();
+            return response()->json($chip, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function getAllTopup(Request $request)
+    {
+        try {
+            //code...
+            $status = $request->query('status');
+            $where = [];
+            if ($status) $where = [['status', '=', $status]];
+            $topup = Topup::where($where)->get();
+            return response()->json($topup, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function deleteBri(Request $request)
+    {
+        try {
+            //code...
+            $id = $request->route('briId');
+            $bri = Bri::find($id);
+            if (!$bri) return response()->json(['message' => 'data tidak di temukan'], 404);
+            $bri->delete();
+            return response()->json(['message' => 'data berhasil di hapus'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+
+    public function deleteTopup(Request $request)
+    {
+        try {
+            //code...
+            $id = $request->route('topupId');
+            $topup = Topup::find($id);
+            if (!$topup) return response()->json(['message' => 'data tidak di temukan'], 404);
+            $topup->delete();
+            return response()->json(['message' => 'data berhasil di hapus'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 500]);
+        }
+    }
+    public function deleteChip(Request $request)
+    {
+        try {
+            //code...
+            $id = $request->route('chipId');
+            $chip = Chip::find($id);
+            if (!$chip) return response()->json(['message' => 'data tidak di temukan'], 404);
+            $chip->delete();
+            return response()->json(['message' => 'data berhasil di hapus'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage(), 500]);
         }
