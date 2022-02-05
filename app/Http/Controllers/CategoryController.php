@@ -19,14 +19,14 @@ class CategoryController extends Controller
     {
         try {
             $validation = Validator::make($request->all(), [
-                'nama_pulsa' => "required|unique:pulsas"
+                'nama' => "required|unique:pulsas"
             ], [
-                'nama_pulsa.required' => "nama tidak boleh kosong",
-                'nama_pulsa.unique' => "nama tersebut sudah digunankan"
+                'nama.required' => "nama tidak boleh kosong",
+                'nama.unique' => "nama tersebut sudah digunankan"
             ]);
             if ($validation->fails()) return response()->json($validation->errors(), 400);
             $pulsa = Pulsa::create([
-                'nama_pulsa' => $request->nama_pulsa,
+                'nama' => $request->nama,
                 'status' => "active"
             ]);
 
@@ -39,20 +39,20 @@ class CategoryController extends Controller
     {
         try {
             $pulsaId = $request->route('pulsaId');
-            $nama_pulsa = $request->nama_pulsa;
+            $nama = $request->nama;
             $status = $request->status;
             $pulsa = Pulsa::find($pulsaId);
             if (!$pulsa) return response()->json(['message' => 'data tidak ditemukan'], 404);
-            if ($nama_pulsa) {
-                $checkNama = Pulsa::where('nama_pulsa', $nama_pulsa)->first();
+            if ($nama) {
+                $checkNama = Pulsa::where('nama', $nama)->first();
                 if ($checkNama) return response()->json(['message' => "nama tersebut sudah digunakan"], 400);
             } else {
-                $nama_pulsa = $pulsa['nama_pulsa'];
+                $nama = $pulsa['nama'];
             }
             if (!$status) $status = $pulsa['status'];
 
             $pulsa->update([
-                'nama_pulsa' => $nama_pulsa,
+                'nama' => $nama,
                 'status' => $status
             ]);
             return response()->json(['message' => 'data berhasil di ubah'], 200);
@@ -74,7 +74,7 @@ class CategoryController extends Controller
             if ($request->query('limit')) $limit = $request->query('limit');
             $offset = $limit * ($page - 1);
             $where = [];
-            if ($nama) $where = [...$where, ['nama_pulsa', 'like', '%' . $nama . '%']];
+            if ($nama) $where = [...$where, ['nama', 'like', '%' . $nama . '%']];
             if ($status) $where = [...$where, ['status', '=', $status]];
             $pulsa = Pulsa::where($where)
                 ->skip($offset)
