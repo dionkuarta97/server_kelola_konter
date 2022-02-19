@@ -11,7 +11,7 @@ class Pulsa extends Model
     use HasFactory;
 
     protected $primaryKey = 'pulsaId';
-    protected $fillable = ['nama_pulsa', 'status'];
+    protected $fillable = ['nama', 'status'];
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
