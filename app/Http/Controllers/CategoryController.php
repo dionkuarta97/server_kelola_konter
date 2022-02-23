@@ -43,10 +43,7 @@ class CategoryController extends Controller
             $status = $request->status;
             $pulsa = Pulsa::find($pulsaId);
             if (!$pulsa) return response()->json(['message' => 'data tidak ditemukan'], 404);
-            if ($nama) {
-                $checkNama = Pulsa::where('nama', $nama)->first();
-                if ($checkNama) return response()->json(['message' => "nama tersebut sudah digunakan"], 400);
-            } else {
+            if (!$nama) {
                 $nama = $pulsa['nama'];
             }
             if (!$status) $status = $pulsa['status'];
